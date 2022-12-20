@@ -79,24 +79,52 @@ namespace part2_umlProject
     [Serializable]
     class Customer
     {
-        string id, name, shippingAdress, phoneNumber, passWord, paymentInfo;
-        Listing[] myItems; 
-        public Customer(string id, string name, string shippingAdress, string phoneNumber, string passWord, string paymentInfo)
+        string id, name, shippingAdress, phoneNumber, passWord;
+        Payment payment;
+        //Listing[] myItems; 
+        public Customer() { }
+        public Customer(string id, string name, string shippingAdress, string phoneNumber, string passWord)
         {
             this.Id = id;
             this.Name = name;
             this.ShippingAdress = shippingAdress;
             this.PhoneNumber = phoneNumber;
             this.PassWord = passWord;
-            this.PaymentInfo = paymentInfo;
+           
+        }
+        public void SingUp()
+        {
+            
+            Console.Write("Enter your name: ");
+            Name=Console.ReadLine();
+            Console.Write("Enter your  shipping address: ");
+            ShippingAdress=Console.ReadLine();
+            Console.Write("Enter your phone:   ");
+            PhoneNumber=Console.ReadLine();
+            
+            Console.Write("Enter your password: ");
+            PassWord=Console.ReadLine();
+            Console.WriteLine("Enter your payment information: ");
+            
+            string cardNumber, pinCode, billingAdress;
+            Console.Write("Enter your card number: ");
+            cardNumber=Console.ReadLine();
+             Console.Write("Enter your card pin code: ");
+            pinCode=Console.ReadLine();
+             Console.Write("Enter your card billiding address: ");
+            billingAdress=Console.ReadLine();
+            payment=new Payment(cardNumber, pinCode, billingAdress);
+
+            
         }
 
+        
         public string Id { get => id; set => id = value; }
         public string Name { get => name; set => name = value; }
         public string ShippingAdress { get => shippingAdress; set => shippingAdress = value; }
         public string PhoneNumber { get => phoneNumber; set => phoneNumber = value; }
         public string PassWord { get => passWord; set => passWord = value; }
-        public string PaymentInfo { get => paymentInfo; set => paymentInfo = value; }
+        public Payment Payment{ get => payment; set => payment = value; }
     }
     [Serializable]
     class Seller
@@ -184,7 +212,7 @@ namespace part2_umlProject
         
       
      
-        public void Menue()
+        public void Menueseller()
         {
                 
                 Console.WriteLine("1-Adding new listing:");
@@ -195,6 +223,21 @@ namespace part2_umlProject
                 Console.WriteLine("6-Change account information:");
                 Console.WriteLine("7-log out:");
             Console.Write("What do you want to do ? ");
+        }
+        public void MenueBuyer()
+        {
+             
+                Console.WriteLine("1. View all available listings");
+                Console.WriteLine("2.View a chosen listing information (i.e., price, seller information");
+                Console.WriteLine("3.Add a listing to their cart");
+                Console.WriteLine("4. View/Edit added listings to their cart");
+                Console.WriteLine("5. Checkout listings");
+                Console.WriteLine("6. Change account information (i.e., password)");
+                Console.WriteLine("7. [optional] search for a listing");
+                Console.WriteLine("8.log out");
+
+            Console.Write("What do you want to do ? ");
+
         }
 
 
@@ -230,7 +273,7 @@ namespace part2_umlProject
                 if (answer== "log in")
                   {
                     /*....*/
-                    sys.Menue();
+                    sys.Menueseller();
                  
                  int chose=Convert.ToInt32(Console.ReadLine());
                     if(chose==1)
@@ -243,7 +286,7 @@ namespace part2_umlProject
                     Seller s=new Seller();  
                     s.SingUp();
                     //save in file
-                    sys.Menue();
+                    sys.Menueseller();
                      int chose=Convert.ToInt32(Console.ReadLine());
                     if(chose==1)
                     {
@@ -267,22 +310,39 @@ namespace part2_umlProject
                       s.DeleteListing(ID);
 
                     }
-                    
-                    
-                    
-
-
-                }
-                
-                
-              
-
-
-
-
+                  }
+ 
             }
             if(user=="costomer")
             {
+                Console.Write("Are you new here? or you want tolog in ?(log in /sign up)");
+                string answer = Console.ReadLine();
+                if (answer== "log in")
+                {
+                    /*....*/
+                    sys.MenueBuyer();
+                 
+                 int chose=Convert.ToInt32(Console.ReadLine());
+                    if(chose==1)
+                    {
+                        
+                    }
+                }
+                if(answer== "sign up")
+                {
+                    Customer c=new Customer();  
+                    c.SingUp();
+                    //save in file
+                    sys.MenueBuyer();
+                     int chose=Convert.ToInt32(Console.ReadLine());
+                    if(chose==1)
+                    {
+                        /*View all available listings*/
+                        /*read the lists from file seller account in system class*/
+
+
+                    }
+
 
             }
            
@@ -290,3 +350,4 @@ namespace part2_umlProject
         }
     }
 }
+    }
