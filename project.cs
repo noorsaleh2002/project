@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
 using System.Runtime.Remoting.Messaging;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.Xml.Linq;
@@ -165,6 +166,7 @@ namespace part2_umlProject
         }
         public void DeleteListing(int ID)
         {
+            if (listItime.Capacity != 0) { 
             int j=0;
             foreach(Listing i in listItime)
             {
@@ -173,6 +175,16 @@ namespace part2_umlProject
                     listItime.RemoveAt(j);    
                 }
                 j++;
+            }
+            }
+            else
+            {
+                Console.Write("There is no lists yet do you want to add Listing?(y/n)")
+                char answer=Convert.ToChar(Console.ReadLine());
+                /*
+                 add go to add listing funciton if you have time....
+                 
+                 */
             }
                 
         }
@@ -199,23 +211,18 @@ namespace part2_umlProject
 
     }
    
-   
     [Serializable]
     class System
     {
        /* List<Seller> sellerlist=new List<Seller>();
+        List<Customer> customerlist=new List<Customer>();
         Seller s;
         Customer c;
         FileStream fileStream ;
         BinaryFormatter formatter;
         int IDcounter = 0;*/
-        
-      
-     
         public void Menueseller()
-        {
-                
-                Console.WriteLine("1-Adding new listing:");
+        {   Console.WriteLine("1-Adding new listing:");
                 Console.WriteLine("2-Delete exiting listing:");
                 Console.WriteLine("3-Change info and price for existing listing(s):");
                 Console.WriteLine("4-View all listings :");
@@ -226,7 +233,6 @@ namespace part2_umlProject
         }
         public void MenueBuyer()
         {
-             
                 Console.WriteLine("1. View all available listings");
                 Console.WriteLine("2.View a chosen listing information (i.e., price, seller information");
                 Console.WriteLine("3.Add a listing to their cart");
@@ -235,83 +241,129 @@ namespace part2_umlProject
                 Console.WriteLine("6. Change account information (i.e., password)");
                 Console.WriteLine("7. [optional] search for a listing");
                 Console.WriteLine("8.log out");
-
-            Console.Write("What do you want to do ? ");
-
-        }
-
-
-
-        /*public void SaveSellersAccounts(Seller s)
+                Console.Write("What do you want to do ? ");
+         }
+        public void SaveSellersAccounts(Seller s)
         {
-            FileStream fileStream = new FileStream("Sellers Accounts", FileMode.Open, FileAccess.Write);
-            formatter= new BinaryFormatter();
+            FileStream fileStream = new FileStream("SellersAccounts.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            BinaryFormatter formatter= new BinaryFormatter();
             formatter.Serialize(fileStream, s);
             fileStream.Close();
-        }*/
+        }
+        public void SaveBuyersAccounts(Customer c)
+        {
+            FileStream fileStream = new FileStream("Customers Accounts.data", FileMode.Open, FileAccess.Write);
+            BinaryFormatter formatter= new BinaryFormatter();
+            formatter.Serialize(fileStream, c);
+            fileStream.Close();
+        }
+        public  void SellerInterAction(Seller s)
+        {        
+            bool logout=false;  
+             while (!logout) { 
+                       
+                Menueseller();
+                int chose=Convert.ToInt32(Console.ReadLine());
+                if (chose == 1) { //Adding new listing:
+                        
+                  bool flage=true;
+                  while (flage) { 
+                     s.AddingListing() ;
+                     Console.Write("Do you want to add more?(yes/no) ");
+                     string more=Console.ReadLine();
+                     if (more !="yes")
+                     flage=false;    
+                        
+                                  }
+
+                 }
+                if(chose==2){//Deleting exist listing 
+                  
+                  Console.Write("Enter the ID of your list to be deleted: ");
+                  int id=Convert.ToInt32(Console.ReadLine());
+                  s.DeleteListing(id);
+    
+                 }
+                if (chose==3) {// Change info and price for existing listing(s
+
+                            
+                   }  
+                if (chose==4) {
+
+                            
+                   }
+                if (chose == 5)
+                {
+
+                }
+                if(chose == 6) { 
+                }
+                if (chose == 7)
+                {
+
+                }
+                
+             }
+                     
+        }
+        public void BuyerInterAction()
+        {
+           
+        }//not implement yet.....
+        public Seller ReturnSeller(string email,string password)
+        {
+             FileStream fileStream = new FileStream("Sellers Accounts.data", FileMode.Open, FileAccess.Read);
+            BinaryFormatter formatter= new BinaryFormatter();
+            Seller s;
+            while (fileStream.Position<fileStream.Length)
+            {
+                s=(Seller)formatter.Deserialize(fileStream);
+                if(s.Emai==email && s.PassWrod==password) return s;
+                    
+            }
+            return null;
+            fileStream.Close();
+        }
        
-        
-      
-
-
     }
     internal class Program
     {
+       
         static void Main(string[] args)
         {
 
             System sys=new System();
 
             Console.Write("Hello there! Are you costomer or seller? ");
-            //int ID=0;
+            
             string user = Console.ReadLine();
 
             if (user == "seller")
             {
                 Console.Write("Are you new here? or you want tolog in ?(log in /sign up)");
                 string answer = Console.ReadLine();
+
                 if (answer== "log in")
                   {
-                    /*....*/
-                    sys.Menueseller();
-                 
-                 int chose=Convert.ToInt32(Console.ReadLine());
-                    if(chose==1)
-                    {
-                        
-                    }
-                }
+                    string email,password;
+                    Console.Write("Enter your email: ");
+                    email = Console.ReadLine();
+                    Console.Write("Enter your password: ");
+                    password = Console.ReadLine();
+                    Seller s =sys.ReturnSeller(email,password);
+                    if (s!=null)
+                        sys.SellerInterAction(s); 
+                   else 
+                        Console.WriteLine("Error there is no account like this pleas try again ...");
+                    //go to Home page or to log in page....
+                 }
                 if(answer== "sign up")
-                {
+                { 
                     Seller s=new Seller();  
                     s.SingUp();
-                    //save in file
-                    sys.Menueseller();
-                     int chose=Convert.ToInt32(Console.ReadLine());
-                    if(chose==1)
-                    {
-                        bool flage=true;
-                        while (flage) { 
-                       s.AddingListing() ;
-                        
-                        Console.Write("Do you want to add more?(yes/no) ");
-                        string more=Console.ReadLine();
-                        if (more !="yes")
-                                flage=false;    
-                        s.print();
-                    }
-
-                    }
-                    if(chose==2)
-                    {
-                        int ID;
-                        Console.Write("Enter the ID of your list to be deleted: ");
-                        ID=Convert.ToInt32(Console.ReadLine());
-                      s.DeleteListing(ID);
-
-                    }
-                  }
- 
+                    sys.SaveSellersAccounts(s);
+                    sys.SellerInterAction(s);     
+                }
             }
             if(user=="costomer")
             {
@@ -322,32 +374,20 @@ namespace part2_umlProject
                     /*....*/
                     sys.MenueBuyer();
                  
-                 int chose=Convert.ToInt32(Console.ReadLine());
-                    if(chose==1)
-                    {
-                        
-                    }
+                
                 }
                 if(answer== "sign up")
                 {
                     Customer c=new Customer();  
                     c.SingUp();
-                    //save in file
-                    sys.MenueBuyer();
-                     int chose=Convert.ToInt32(Console.ReadLine());
-                    if(chose==1)
-                    {
-                        /*View all available listings*/
-                        /*read the lists from file seller account in system class*/
-
-
-                    }
-
-
-            }
+                    sys.SaveBuyersAccounts(c);
+                    sys.BuyerInterAction();
+                }
            
 
-        }
+            }
+
+
+         }
     }
-}
-    }
+ }
