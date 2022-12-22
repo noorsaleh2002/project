@@ -47,11 +47,11 @@ namespace part2_umlProject
         }
         public void print()
         {
-            Console.WriteLine("ID: {0}",listId);
-            Console.WriteLine(NameList);
-            Console.WriteLine(Description);
-            Console.WriteLine(Price);   
-            Console.WriteLine(NumbrOfItem);
+            Console.WriteLine("List name : {0}",NameList);
+            Console.WriteLine("ID: {0}",listId);  
+            Console.WriteLine("About the list {0}",Description);
+            Console.WriteLine("price for each item : {0}",Price);   
+            Console.WriteLine("Number of item in the listing : {0}",NumbrOfItem);
         }
         public int ListId { get => listId; set => listId = value; }
         public string NameList { get => nameList; set => nameList = value; }
@@ -198,7 +198,31 @@ namespace part2_umlProject
         public void ChangeListInfo(int ID)
         {
             //sreach for list
-            //change info
+            if(listItime.Capacity != 0) {
+                for(int i=0; i<listItime.Capacity; i++) {
+                    if (listItime[i].ListId==ID) {
+                        //change info
+                        Console.WriteLine("What do you want to chang?")
+                        Console.WriteLine("1-The name\n2-The descreption\n3-The price\n4-The number of items");
+                        Console.Write("Enter your choise:");
+                        int answer=Convert.ToInt32(Console.ReadLine());
+                        switch (answer) { 
+                           case 1:{ Console.Write("Enter new List Name: ");
+                            listItime[i].NameList=Console.ReadLine();break;}
+                            case 2: { Console.Write("Enter the new decreption: ");   
+                                    listItime[i].Description=Console.ReadLine();break;}
+                            case 3: {Console.Write("Enter the new price: ");
+                                    listItime[i].Price=Convert.ToDouble(Console.ReadLine());break;}
+                            case 4: { Console.Write("Enter new number of item: ");
+                                    listItime[i].NumbrOfItem=Convert.ToInt32(Console.ReadLine()); break;}
+                                     
+                        }
+
+                    }
+                    //save the update in file
+                }
+             else { Console.WriteLine("NO List have the given id");}
+            
         }
         public void ViewLists()
         {
@@ -250,6 +274,15 @@ namespace part2_umlProject
             formatter.Serialize(fileStream, s);
             fileStream.Close();
         }
+        public Seller LoadSellersItem()
+            {
+                FileStream fileStream = new FileStream("SellersAccounts.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                BinaryFormatter formatter= new BinaryFormatter();
+                Seller[] s=new Seller[fileStream.Length];
+                for(fileStream.Position<fileStream.Length)
+                    s[fileStream.Position++] = formatter.Deserialize(fileStream);
+                return s;
+            }
         public void SaveBuyersAccounts(Customer c)
         {
             FileStream fileStream = new FileStream("Customers Accounts.data", FileMode.Open, FileAccess.Write);
@@ -285,22 +318,56 @@ namespace part2_umlProject
     
                  }
                 if (chose==3) {// Change info and price for existing listing(s
-
+                    Console.Write("Enter the ID of your list to be updated: ");
+                  int id=Convert.ToInt32(Console.ReadLine());
+                    s.ChangeListInfo(id);
                             
                    }  
-                if (chose==4) {
+                if (chose==4) {//View all listings 
+                    Console.Write("Do you want to veiw your listing or other sellers listing...? (Enter 1 or 2) :   ");
+                    int answer=Convert.ToInt32(Console.ReadLine()) ;
+                    if (answer)
+                        {
+                            //veiw just  seller listing..
+                            s.print();
 
-                            
+                        }
+                    else { 
+                           //veiw other listing from load the seller account from file so must emplement load function first....
+                           Seller [] s = LoadSellersItem();
+                            for (int i=0;i<s.Length;i++)
+                            {
+                                s[i].print();
+                            }
+                        }
                    }
                 if (chose == 5)
                 {
+                        //. View sold listings information 
+                        //The solution in array save all the list id by load all the customer and compare if id in arry== customer
+                        
 
                 }
-                if(chose == 6) { 
+                if(chose == 6) { //Change account information
+                        Console.WriteLine("What do you want to change? ..");
+                        //string name, address, emai,phoneNumber,storeName,password;
+                        Console.WriteLine("1-Name\n2-Address\n3-Email\n4-Phone number\n5-Store name\n6-Pass word";
+                        int answer=Convert.ToInt32(Console.ReadLine());
+                        switch(answer)
+                        {
+                            case 1: { Console.Write("Enter new name: ");s.Name=Console.ReadLine();break;}
+                            case 2: {  Console.Write("Enter new address: ");s.Address=Console.ReadLine();break;}
+                            case 3: {  Console.Write("Enter new email: ");s.Emai=Console.ReadLine();break;}
+                            case 4: {  Console.Write("Enter new phone number: ");s.PhoneNumber=Console.ReadLine();break;}
+                            case 5: {  Console.Write("Enter new store name: ");s.StoreName=Console.ReadLine();break;}
+                            case 6: {  Console.Write("Enter new password: ");s.PassWrod=Console.ReadLine();break;}
+                        }
+                        //save update
                 }
                 if (chose == 7)
                 {
-
+                        //log out ,,,,use (go to )
+                        logout=true;
                 }
                 
              }
@@ -365,6 +432,7 @@ namespace part2_umlProject
                     sys.SellerInterAction(s);     
                 }
             }
+
             if(user=="costomer")
             {
                 Console.Write("Are you new here? or you want tolog in ?(log in /sign up)");
