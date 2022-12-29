@@ -483,7 +483,8 @@ namespace part2_umlProject
                     int listID;
                     Console.Write("Enter the List ID for more information: ");
                     listID = Convert.ToInt32(Console.ReadLine());
-                     Seller [] s=LoadSellersItem();
+                     
+                     //or from the above for loop make  a function that returen the list of avalabile list.
                     foreach(Seller seller in s)
                     {
                       List <Listing> listItim=seller.SellerListListing();
@@ -588,6 +589,8 @@ namespace part2_umlProject
 
             System sys=new System();
 
+            log_out: { 
+                NewMethod();
             Console.Write("Hello there! Are you costomer or seller? ");
             
             string user = Console.ReadLine();
@@ -616,6 +619,7 @@ namespace part2_umlProject
                         sys.SaveSellersAccounts(s);
                         NewMethod();
                         sys.SellerInterAction(s);
+                        //////////goto log_out; from aya <3
                     }
                        
                    else 
@@ -628,7 +632,8 @@ namespace part2_umlProject
                     s.SingUp();
                     sys.SaveSellersAccounts(s);
                     NewMethod();
-                    sys.SellerInterAction(s);     
+                    sys.SellerInterAction(s);   
+                    //////goto log_out; From aya
                 }
             }
 
@@ -649,6 +654,7 @@ namespace part2_umlProject
                         sys.SaveBuyersAccounts(c);
                         NewMethod();
                         sys.BuyerInterAction(c);
+                        ////goto log_out; 
                     }
 
                     else
@@ -663,6 +669,7 @@ namespace part2_umlProject
                     sys.SaveBuyersAccounts(c);
                     NewMethod();
                     sys.BuyerInterAction(c);
+                        //goto log_out;
                 }
            
 
