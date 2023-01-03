@@ -1,0 +1,14 @@
+C:\Users\user\Desktop\fainalllly\bin\Debug\netcoreapp3.1\fainalllly.exe
+C:\Users\user\Desktop\fainalllly\bin\Debug\netcoreapp3.1\fainalllly.deps.json
+C:\Users\user\Desktop\fainalllly\bin\Debug\netcoreapp3.1\fainalllly.runtimeconfig.json
+C:\Users\user\Desktop\fainalllly\bin\Debug\netcoreapp3.1\fainalllly.runtimeconfig.dev.json
+C:\Users\user\Desktop\fainalllly\bin\Debug\netcoreapp3.1\fainalllly.dll
+C:\Users\user\Desktop\fainalllly\bin\Debug\netcoreapp3.1\fainalllly.pdb
+C:\Users\user\Desktop\fainalllly\obj\Debug\netcoreapp3.1\fainalllly.csproj.AssemblyReference.cache
+C:\Users\user\Desktop\fainalllly\obj\Debug\netcoreapp3.1\fainalllly.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\Desktop\fainalllly\obj\Debug\netcoreapp3.1\fainalllly.AssemblyInfoInputs.cache
+C:\Users\user\Desktop\fainalllly\obj\Debug\netcoreapp3.1\fainalllly.AssemblyInfo.cs
+C:\Users\user\Desktop\fainalllly\obj\Debug\netcoreapp3.1\fainalllly.csproj.CoreCompileInputs.cache
+C:\Users\user\Desktop\fainalllly\obj\Debug\netcoreapp3.1\fainalllly.dll
+C:\Users\user\Desktop\fainalllly\obj\Debug\netcoreapp3.1\fainalllly.pdb
+C:\Users\user\Desktop\fainalllly\obj\Debug\netcoreapp3.1\fainalllly.genruntimeconfig.cache
