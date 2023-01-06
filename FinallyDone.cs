@@ -131,9 +131,12 @@ namespace part2_umlProject
             this.Id = id;
             this.Name = name;
             this.ShippingAdress = shippingAdress;
-            string testPhonenumber = Convert.ToString(phoneNumber);
-            if (testPhonenumber.Length == 10 &&( testPhonenumber.StartsWith("079") || testPhonenumber.StartsWith("077")|| testPhonenumber.StartsWith("078")))
-                this.PhoneNumber = phoneNumber;
+
+            string testPhonenumber = phoneNumber.ToString();
+
+            if (testPhonenumber.Length == 10 && (testPhonenumber.StartsWith("079") || testPhonenumber.StartsWith("077") || testPhonenumber.StartsWith("078")))
+
+                this.PhoneNumber = Convert.ToInt32(testPhonenumber);
             else
             {
                 Console.WriteLine("Wrong phoneNumber ");
@@ -155,10 +158,13 @@ namespace part2_umlProject
                 Console.Write("Enter your  shipping address: ");
                 ShippingAdress = Console.ReadLine();
                 Console.Write("Enter your phone:   ");
-                phoneNumber = Convert.ToInt32(Console.ReadLine());
-                string testPhonenumber = Convert.ToString(phoneNumber);
+
+
+                string testPhonenumber = Console.ReadLine();
+
                 if (testPhonenumber.Length == 10 && (testPhonenumber.StartsWith("079") || testPhonenumber.StartsWith("077") || testPhonenumber.StartsWith("078")))
-                    this.PhoneNumber = phoneNumber;
+
+                    this.PhoneNumber = Convert.ToInt32(testPhonenumber);
                 else
                 {
                     Console.WriteLine("Wrong phoneNumber ");
@@ -198,7 +204,10 @@ namespace part2_umlProject
 
         public List<Item> Getchart()
         {
-            return chart;
+            if (chart.Count != 0)
+                return chart;
+            else
+                return null;
         }
 
 
@@ -216,7 +225,7 @@ namespace part2_umlProject
         {
             return shippingAdress;
         }
-        public  void ClearChart()
+        public void ClearChart()
         {
             chart.Clear();
         }
@@ -515,7 +524,7 @@ namespace part2_umlProject
 
         public void SaveSellersAccounts()
         {
-            FileStream fileStream = new FileStream("Sellers_Accounts.txt", FileMode.OpenOrCreate, FileAccess.Write);
+            FileStream fileStream = new FileStream("Sellers_Accounts.txt", FileMode.Create, FileAccess.Write);
             BinaryFormatter formatter = new BinaryFormatter();
             foreach (Seller s in sellers)
             {
@@ -525,7 +534,7 @@ namespace part2_umlProject
         }
         public void SaveBuyersAccounts()
         {
-            FileStream fileStream = new FileStream("Customers_Accounts.txt", FileMode.OpenOrCreate, FileAccess.Write);
+            FileStream fileStream = new FileStream("Customers_Accounts.txt", FileMode.Create, FileAccess.Write);
             BinaryFormatter formatter = new BinaryFormatter();
             foreach (Customer c in customers)
             {
@@ -745,7 +754,7 @@ namespace part2_umlProject
                                     if (l2.ListId == listID && !found)
                                     {
                                         int numberOfItems;
-                                        Console.Write("How many item you want to add to your chart?: ");
+                                        Console.Write("How many item you want to add to your chart? one: ");
                                         numberOfItems = Convert.ToInt32(Console.ReadLine());
                                         if (numberOfItems <= l2.NumbrOfItem)
 
@@ -761,10 +770,10 @@ namespace part2_umlProject
                                             Console.WriteLine("Can't added the item successfully..");
                                         }
                                     }
-                                    else
+                                    else if (l2.ListId == listID && found)
                                     {
                                         int numberOfItems;
-                                        Console.Write("How many item you want to add to your chart?: ");
+                                        Console.Write("How many item you want to add to your chart? tow: ");
                                         numberOfItems = Convert.ToInt32(Console.ReadLine());
                                         if (numberOfItems <= l2.NumbrOfItem)
 
@@ -804,73 +813,84 @@ namespace part2_umlProject
                 }
 
                 if (chose == 4)
-                {//View/Edit added listings to their cart
-                 //Make funtion to print the List of Listing (chart)
-                    c.PrintChartItimes();
-                //ask the customer if he want to delete item by giving the id from the List(chart)
 
-                deletmoreone:
+                {
+                    List<Item> myitems = c.Getchart();
+                    if (myitems != null)
                     {
-                        char x;
-                        Console.WriteLine("Do you want to delete items form your chart?(y/n): ");
-                        x = Convert.ToChar(Console.ReadLine());
-                        Seller seller;
-                        if (x == 'y')
+
+                        //View/Edit added listings to their cart
+                        //Make funtion to print the List of Listing (chart)
+                        c.PrintChartItimes();
+                    //ask the customer if he want to delete item by giving the id from the List(chart)
+
+                    deletmoreone:
                         {
-                            int itemID;
-                            Console.Write("Enter the Itim ID to deleted: ");
-                            itemID = Convert.ToInt32(Console.ReadLine());
-                            List<Item> items = c.Getchart();
-
-
-                            for (int i = 0; i < items.Count; i++)
+                            char x;
+                            int ditem;
+                            Console.WriteLine("Do you want to delete items form your chart?(y/n): ");
+                            x = Convert.ToChar(Console.ReadLine());
+                            Seller seller;
+                            if (x == 'y')
                             {
-                                Item item = items[i];
-                                if (item.ItemId == itemID)
+                                int itemID;
+                                Console.Write("Enter the Itim ID to deleted: ");
+                                itemID = Convert.ToInt32(Console.ReadLine());
+                                List<Item> items = c.Getchart();
+
+
+                                for (int i = 0; i < items.Count; i++)
                                 {
-                                    if (item.NumberOfItems > 1)
+                                    Item item = items[i];
+                                    if (item.ItemId == itemID)
                                     {
+
+
                                         Console.Write("How many item do you want to delete? ");
-                                        int ditem = Convert.ToInt32(Console.ReadLine());
-                                        if (ditem < item.NumberOfItems)
+                                        ditem = Convert.ToInt32(Console.ReadLine());
+                                        if (item.NumberOfItems == 0) Console.WriteLine("You have deleted all your item already..");
+                                        else if (item.NumberOfItems >= 1)
                                         {
-                                            item.NumberOfItems -= ditem;
-                                            for (int j = 0; j < sellers.Count; j++)
+                                            if (ditem < item.NumberOfItems)
                                             {
-                                                seller = sellers[j];
-                                                List<Listing> l = seller.GetlistItime();
-                                                for (int k = 0; k < l.Count; k++)
+                                                item.NumberOfItems -= ditem;
+                                                for (int j = 0; j < sellers.Count; j++)
                                                 {
-                                                    if (l[k].ListId == itemID)
+                                                    seller = sellers[j];
+                                                    List<Listing> l = seller.GetlistItime();
+                                                    for (int k = 0; k < l.Count; k++)
                                                     {
-                                                        l[k].NumbrOfItem = l[k].NumbrOfItem + ditem;
+                                                        if (l[k].ListId == itemID)
+                                                        {
+                                                            l[k].NumbrOfItem = l[k].NumbrOfItem + ditem;
 
 
+                                                        }
                                                     }
+
                                                 }
 
+
+
                                             }
-
-
+                                            else if (ditem > item.NumberOfItems) Console.WriteLine("You have less items than you enter....Error");
+                                            else c.Getchart().Remove(item);
 
                                         }
-                                        else if (ditem == item.NumberOfItems)
-                                            c.Getchart().Remove(item);
-                                        else Console.WriteLine("You have less items than you enter....Error");
 
 
                                     }
-                                    else c.Getchart().Remove(item);
+                                    else { Console.WriteLine("There is no id like that in your chart..."); }
+
 
                                 }
 
 
+                                goto deletmoreone;
                             }
-
-
-                            goto deletmoreone;
                         }
                     }
+                    else { Console.WriteLine("You don't have nothing in your chart"); }
 
                 }
                 if (chose == 5)
@@ -906,7 +926,7 @@ namespace part2_umlProject
                         c.ClearChart();
 
 
-                        
+
                     }
                     else
                     {
@@ -1006,7 +1026,7 @@ namespace part2_umlProject
             {
 
                 NewMethod();
-                Console.Write("Hello there! Are you customer or seller? ");
+                Console.Write("Hello there! Are you customer or seller or close app (close)? ");
 
                 string user = Console.ReadLine();
 
@@ -1102,6 +1122,8 @@ namespace part2_umlProject
 
 
                 }
+                if (user == "close")
+                    Environment.Exit(0);
 
             }
         }
